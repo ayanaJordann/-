@@ -1,0 +1,162 @@
+# Импортируем из PyQt6.QtWidgets классы для создания приложения и виджета
+from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTextEdit, \
+    QLabel, QListWidget, QPushButton, QLineEdit, QInputDialog, QMessageBox
+import sys
+# Импорт библиотеки
+import json
+
+try:
+    with open('notes.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+except FileNotFoundError:
+    data = {}
+class zametki(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(0, 0,600 , 800)
+        self.setWindowTitle('Заметки Аяши')
+        # Создаем кнопку.
+        # Передаем 2 параметра:
+        # надпись и виджет, на котором будет размещена кнопка
+        btn1 = QPushButton('создать заметку', self)
+        # Изменяем размер кнопки. Теперь он 100 на 100 пикселей
+        btn1.resize(280, 50)
+        btn1.move(5, 510)
+        # Размещаем кнопку на родительском виджете
+        # по координатам (100, 100)
+        self.name_input = QTextEdit(self)
+        self.name_input.move(5, 5)
+        self.name_input.resize(280, 500)
+
+        btn2 = QPushButton('удалить заметку', self)
+        btn2.move(300,452)
+        btn2.resize(300, 48)
+
+        btn3 = QPushButton('изменить заметку', self)
+        btn3.move(300, 510)
+        btn3.resize(300, 50)
+
+        lst_notes = QListWidget()
+        lst_notes.move(100, 100)
+        lst_notes.resize(270, 50)
+        text_note = QTextEdit()
+        lst_tags = QListWidget()
+
+
+
+        lst_notes.addItems(data.keys())
+
+
+        self.label1 = QLabel(self)
+        # Текст задается также, как и для кнопки
+        self.label1.setText("ВСе заметки:")
+        self.label1.move(300, 5)
+
+        self.label2 = QLabel(self)
+        # Текст задается также, как и для кнопки
+        self.label2.setText("доп")
+        self.label2.move(260, 570)
+
+        btn4 = QPushButton('создать тег', self)
+        btn4.move(320, 620)
+        btn4.resize(270, 50)
+
+        btn5 = QPushButton('удалить тег', self)
+        btn5.move(320, 680)
+        btn5.resize(270, 50)
+
+        btn6 = QPushButton('найти по тегу', self)
+        btn6.move(320, 740)
+        btn6.resize(270, 50)
+
+        def show_note(self):
+            note_name = lst_notes.currentItem().text()
+            n_text = data[note_name]["text"]
+            n_tags = data[note_name]["tags"]
+
+            text_note.setText(n_text)
+            lst_tags.clear()
+            lst_tags.addItems(n_tags)
+
+        self.lst_notes.itemClicked.connect(self.show_note)
+
+        def create_note(self):
+            note_name, result = QInputDialog.getText(self, \
+                                                     "Добавить заметку", "Название заметки:")
+            if result and not note_name in data.keys() and note_name != '':
+                data[note_name] = {
+                    "text": "",
+                    "tags": []
+                }
+                lst_notes.addItem(note_name)
+
+
+
+        def save_all(self):
+            with open('notes.json', 'w', encoding='utf-8') as file:
+                json.dump(data, file, indent=4, ensure_ascii=False)
+
+        def save_note(self):
+            if lst_notes.currentItem():
+                note_name = lst_notes.currentItem().text()
+                data[note_name]['text'] = text_note.toPlainText()
+                save_all()
+
+
+        def delete_note(self):
+            if lst_notes.currentItem():
+                note_name = lst_notes.currentItem().text()
+                del data[note_name]
+
+                cur_row = lst_notes.currentRow()
+                lst_notes.takeItem(cur_row)
+
+                lst_tags.clear()
+                text_note.clear()
+
+        self.btn1.clicked.connect(self.create_note)
+        self.btn2.clicked.connect(self.delete_note)
+        self.btn3.clicked.connect(self.save_note)
+
+
+
+lst_notes = QListWidget()
+lst_notes.move(100, 100)
+lst_notes.resize(270, 50)
+text_note = QTextEdit()
+lst_tags = QListWidget()
+
+try:
+    with open('notes.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+except FileNotFoundError:
+    data = {}
+
+lst_notes.addItems(data.keys())
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    # Создадим класс приложения PyQT
+    app = QApplication(sys.argv)
+    # А теперь создадим и покажем пользователю экземпляр
+    # нашего виджета класса Example
+    ex = zametki()
+
+
+    ex.show()
+    # Будем ждать, пока пользователь не завершил исполнение QApplication,
+    # а потом завершим и нашу программу
+    sys.exit(app.exec())
