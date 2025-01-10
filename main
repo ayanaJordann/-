@@ -11,7 +11,7 @@ app = QApplication([])
 # Создаем основное окно (виджет) приложения.
 window = QWidget()
 # Устанавливаем заголовок окна.
-window.setWindowTitle('заметки Аяши')
+window.setWindowTitle('заметки')
 # устанавливаем иконку для окна
 window.setWindowIcon(QtGui.QIcon('note.png'))
 # Устанавливаем минимальный размер окна.
@@ -34,7 +34,7 @@ col_right = QVBoxLayout()
 layout1 = QVBoxLayout()
 
 # Метка для списка заметок
-lst_notes_label = QLabel('Список заметок Аяши:')
+lst_notes_label = QLabel('Список заметок:')
 # Добавляем метку в layout1
 layout1.addWidget(lst_notes_label)
 
