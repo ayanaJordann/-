@@ -1,17 +1,5 @@
-annotated-types   0.7.0
-attrs             24.2.0
-certifi           2024.7.4
-frozenlist        1.4.1
-idna              3.7
-magic-filter      1.0.12
-multidict         6.0.5
-packaging         24.2
-pip               23.2.1
-pydantic          2.8.2
-pydantic_core     2.20.1
 PyQt6             6.7.1
 PyQt6-Qt6         6.7.3
 PyQt6_sip         13.8.0
 QtPy              2.4.2
-typing_extensions 4.12.2
-yarl              1.9.4
+
